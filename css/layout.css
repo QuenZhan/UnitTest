@@ -1,0 +1,6 @@
+body{
+padding:0 10px;
+}
+.from , .to {
+display:none;
+}

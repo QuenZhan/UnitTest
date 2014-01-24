@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang='zh-TW'>
+<head>
+	<title>Unit Test Page 0.751 -  2013-12-26</title>
+	<link href='css/han.min.css' rel='stylesheet'/>
+	<link href='css/cssResetTrnth.css' rel='stylesheet'/>
+	<link href='css/layout.css' rel='stylesheet'/>
+</head>
+<body>
+<header>
+<h1>Unit Test Page 0.751 -  2013-12-26</h1>
+</header>
+<h2>說明</h2>
+<p>此版本模擬 mainpage 之api呼叫，包含以下api：</p>
+<ul>
+	<li><dfn>getCategories</dfn>
+	<li><dfn>getSingleObject</dfn> : uid=0，呼叫banner
+	<li><dfn>getObjects</dfn> : 呼叫各種頁數；包含錯誤<small>大於總頁數</small>的頁數參數；呼叫次數隨操作面板的page total變化
+	<li><dfn>setUser</dfn> : 目前不包含圖片檔案上傳，固定呼叫<em>20</em>次
+</ul>
+<p>按下操作面板的<u>start</u>之後，<dfn>Log</dfn>區段會列出所有呼叫 api 的 log</p>
+<h2>操作面板</h2>
+<div>
+	<form id="form" enctype="multipart/form-data" action="abc/index.php" method="POST">
+		<input type="hidden" name="mask[]" value="mask" />
+		<div>
+			<label for="url">base url : </label>
+			<input id="url" type="url" value="http://test.talkin.cc/voo/api/" />
+		</div>
+		<div>
+			<label for="delay">delay between each call</label>
+			<input id="delay" type="number" value="100" />
+			<span>ms</span>
+			<small>若此數值過低，會有機率由瀏覽器造成error，目前尚未處理</small>
+		</div>
+		<div>
+			<label for="total">page total</label>
+			<input id="total" type="number" value="10" />
+			<small>影響getObjects 的呼叫次數</small>
+		</div>
+		<div>
+			<label for="photoFile">上傳圖檔</label>
+			<input type="file" name="photoFile" />
+		</div>
+	</form>
+	<button id="mainPage">start</button>
+</div>
+<h2>Log</h2>
+<button id="clear">clear log</button>
+<table>
+	<caption>Table of Log</caption>
+	<thead>
+		<tr>
+			<!-- <th>項目 -->
+			<th>url request
+			<th>post parameter
+			<th>returnActual
+			<th>returnSupposed
+			<th>duration(ms)
+			<th>result
+		</tr>
+	</thead>
+	<tbody id="logConatiner">
+		<tr id="log" class="log">
+			<!-- <td><span class="note">備註</span> -->
+			<td><span class="apiName">api name</span>
+			<td><span class="parameter">parameters</span>
+			<td><span class="returnActual">404 not found</span>
+			<!-- <td><time class="from">Timestamp start</time>
+			<td><time class="to">Timestamp end </time> -->
+			<td><span class="returnSupposed">returnSupposed</span>
+			<td><time class="duration">Timestamp duration </time>
+			<td><span class="campare">result</span>
+		</tr>
+	</tbody>
+</table>
+<script src="script/jquery-1.10.1.min.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script> 
+<script src="script/VooUnitTest.js"></script>
+<!-- <script src="VooUnitTest.js"></script> -->
+<script>
+	if (window.FormData) {  
+		VooUnitTest.formdata = new FormData($("#form")[0]);  
+	}
+	$("#ddd").click(function(){
+		VooUnitTest.formdata = new FormData($("#form")[0]);  
+	});
+	function setup(){
+		VooUnitTest.jForm=$("#form");
+		// 設置 base url
+		VooUnitTest.url=$("#url").val();
+		// 設置 delay between call
+		VooUnitTest.delay=parseInt($("#delay").val());
+		// 設置 有page 的 api 之總 page 數
+		VooUnitTest.total=parseInt($("#total").val());
+	}
+	$("#mainPage").click(function(){
+		setup();
+		VooUnitTest.start();
+	});
+	$("#clear").click(function(){
+		$("#logConatiner").empty();
+		//$('#form').ajaxSubmit();
+	})
+</script>
+</body>
+</html>
